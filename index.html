@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trademarkia Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white border-b border-gray-200 py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="text-2xl font-bold text-blue-900">Trademarkia</div>
+            <div class="flex items-center space-x-4">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Search</button>
+                <button class="bg-orange-500 text-white px-4 py-2 rounded-md">Apply for Trademark</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center space-x-4 mb-8">
+            <div class="flex-1">
+                <div class="relative">
+                    <input type="text" placeholder="Search for trademarks..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="bi bi-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-8">
+            <div class="w-64 flex-shrink-0">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-semibold mb-4">Filters</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Owner</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2">
+                                <option>All Owners</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Law Firm</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2">
+                                <option>All Law Firms</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Attorney</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2">
+                                <option>All Attorneys</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Status</label>
+                            <select class="w-full border border-gray-300 rounded-md p-2">
+                                <option>All Status</option>
+                                <option>Live/Registered</option>
+                                <option>Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold">About 160 Trademarks found for "nike"</h2>
+                        <div class="flex items-center space-x-4">
+                            <button class="p-2 hover:bg-gray-100 rounded-md"><i class="bi bi-filter"></i></button>
+                            <button class="p-2 hover:bg-gray-100 rounded-md"><i class="bi bi-share"></i></button>
+                            <button class="p-2 hover:bg-gray-100 rounded-md"><i class="bi bi-grid"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6" id="searchResults">
+                        <!-- Results will be dynamically populated -->
+                    </div>
+
+                    <div id="searchStatus" class="text-center py-4 hidden">
+                        <div class="loading-spinner mx-auto mb-2"></div>
+                        <p class="text-gray-600">Searching...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure
+        const trademarks = [
+            {
+                id: '72302505',
+                name: 'NIKE',
+                owner: 'Nike, Inc.',
+                status: 'Live/Registered',
+                date: '24 Oct 2023',
+                description: 'Retail Footwear and Apparel Store Services',
+                class: '042'
+            },
+            // Add more trademark entries as needed
+        ];
+
+        function renderResults() {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = trademarks.map(tm => `
+                <div class="border-b border-gray-200 pb-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-24 h-24 bg-gray-100 flex items-center justify-center">
+                            <span class="text-xl font-bold">${tm.name}</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <div>
+                                    <h3 class="font-bold">${tm.name}</h3>
+                                    <p class="text-sm text-gray-600">${tm.owner}</p>
+                                    <p class="text-sm text-gray-600">${tm.id}</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        ${tm.status}
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="mt-2">${tm.description}</p>
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <i class="bi bi-tag mr-2"></i>
+                                <span>Class ${tm.class}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initial render
+        renderResults();
+
+        // Search functionality
+        const searchInput = document.querySelector('input[type="search"]');
+        searchInput.addEventListener('input', (e) => {
+            const searchStatus = document.getElementById('searchStatus');
+            searchStatus.classList.remove('hidden');
+            
+            // Simulate API call
+            setTimeout(() => {
+                searchStatus.classList.add('hidden');
+                // Update results based on search term
+                renderResults();
+            }, 1000);
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
